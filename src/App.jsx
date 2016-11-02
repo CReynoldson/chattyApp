@@ -7,19 +7,41 @@ class App extends Component {
     super(props)
     this.socket = new WebSocket("ws://localhost:3001/");
     this.addMessage = this.addMessage.bind(this);
+    this.receiveMessage = this.receiveMessage.bind(this);
     this.state = {
-      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: []
     };
   }
 
+
+  addMessage (newMessage) {
+    let messageString = (JSON.stringify(newMessage));
+    this.socket.send(messageString);
+  }
+
+  receiveMessage (id, username, content){
+    let incomingMessage = {id: id, username: username, content: content};
+    let messages = this.state.messages.concat(incomingMessage);
+    this.setState({messages: messages});
+  }
+
   componentDidMount() {
     console.log("componentDidMount <App />");
-    console.log("SOCKET:", this.socket);
+
     this.socket.onopen = function (event) {
       console.log("Connected to Server");
     };
-    // exampleSocket.send("Client connected");
+
+    this.socket.onmessage = (event) => {
+      console.log(event.data);
+      let message = JSON.parse(event.data);
+      let id = message.id;
+      let username = message.username;
+      let content = message.content;
+
+      this.receiveMessage(id, username, content);
+    }
 
     // setTimeout(() => {
     //   console.log("Simulating incoming message");
@@ -31,15 +53,6 @@ class App extends Component {
     //   this.setState({messages: messages})
     // }, 3000);
   };
-
-
-  addMessage (newMessage) {
-    // const messages = this.state.messages.concat(newMessage);
-    // this.setState({messages: messages});
-    console.log("Socket?", this.socket);
-    var messageString = (JSON.stringify(newMessage));
-    this.socket.send(messageString);
-  }
 
     render() {
       console.log("Rendering <App/>");
