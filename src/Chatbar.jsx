@@ -5,23 +5,21 @@
   constructor(props){
     super (props)
     this.state = {value: ""}
-    this.handleChange = this.handleChange.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
   }
 
-  handleChange (event) {
-    this.setState({value:event.target.value})
-  }
-
   handleSubmit (event) {
+    this.setState({value:event.target.value})
     let userCount = (this.props.messages.length + 1);
-    console.log("UserCount", userCount);
-    if (event.key == 'Enter'){
-      event.preventDefault();
-      let newMessage = {id: userCount, username: this.props.currentUser.name, content: this.state.value};
-      this.props.handleSubmit(newMessage);
-      this.setState({value: ""});
+    if (event.key === 'Enter'){
+      if(this.state.value.length !== 0){
+        event.preventDefault();
+        let newMessage = {id: userCount, username: this.props.currentUser.name, content: this.state.value};
+        this.props.addMessage(newMessage);
+        event.target.value = "";
+      }
     }
   }
 
@@ -30,7 +28,7 @@
       <footer>
         <input id="username" type="text" defaultValue={this.props.currentUser.name} />
         <input id="new-message" type="text" placeholder="Type a message and hit ENTER"
-               value={this.state.value} onChange={this.handleChange}
+               defaultValue={this.state.value} onChange={this.handleSubmit}
                onKeyDown={this.handleSubmit}/>
       </footer>
     )
