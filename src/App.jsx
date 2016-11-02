@@ -9,7 +9,7 @@ class App extends Component {
     this.addMessage = this.addMessage.bind(this);
     this.receiveMessage = this.receiveMessage.bind(this);
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: []
     };
   }
