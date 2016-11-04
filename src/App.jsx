@@ -7,30 +7,28 @@ class App extends Component {
   constructor(props){
     super(props);
     this.socket = new WebSocket("ws://localhost:3001/");
+
     this.addMessage = this.addMessage.bind(this);
     this.receiveMessage = this.receiveMessage.bind(this);
     this.receiveNotification = this.receiveNotification.bind(this);
     this.addNotification = this.addNotification.bind(this);
     this.updateUserCount = this.updateUserCount.bind(this);
+
     this.state = {
-      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"},
       messages: [],
       userCount: 0
     };
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
 
     this.socket.onopen = function (event) {
       console.log("Connected to Server");
     };
 
     this.socket.onmessage = (event) => {
-
-      console.log("EVENT DATA", event.data);
       let info = JSON.parse(event.data);
-      console.log("INFO TYPE", info.type);
 
       switch(info.type){
         case "incomingMessage":
@@ -40,14 +38,16 @@ class App extends Component {
 
           this.receiveMessage(id, username, content);
           break;
+
         case "incomingNotification":
           let oldUsername = info.oldUsername;
           let newUsername = info.newUsername;
           id = info.id;
-          content = info.content;
+          // content = info.content;
 
-          this.receiveNotification(oldUsername, newUsername);
+          this.receiveNotification(id, oldUsername, newUsername);
           break;
+
         case "userCount":
           console.log(info.data);
           this.updateUserCount(info.data);
@@ -73,7 +73,7 @@ class App extends Component {
       type: "postNotification",
       oldUsername: oldUsername,
       newUsername: newUsername
-    }
+    };
     let notificationString = (JSON.stringify(newNotification));
     this.socket.send(notificationString);
   }
@@ -86,13 +86,15 @@ class App extends Component {
   }
 
   //receive notification from server
-  receiveNotification (oldUsername, newUsername) {
+  receiveNotification (id, oldUsername, newUsername) {
+    console.log("app id for noti:", id);
     let update = `${oldUsername} changed their name to ${newUsername}`;
     let newNoti = this.state.messages.concat({notification: update});
     this.setState({currentUser: {name: newUsername}});
     this.setState({messages: newNoti});
   }
 
+  //receive updates on usercount from server
   updateUserCount (userCount) {
     this.setState({userCount: userCount.usersOnline});
   }

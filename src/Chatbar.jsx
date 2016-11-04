@@ -4,13 +4,12 @@
  export default class Message extends React.Component{
   constructor(props){
     super (props)
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.state = {
       username: "Anonymous",
       content: ""
     }
-    // this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
 
   }
 
@@ -36,6 +35,7 @@
         }
       }
 
+      //Handle new messages
       if (id === "new-message"){
         this.props.addMessage(this.state);
       }

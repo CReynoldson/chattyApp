@@ -30,20 +30,17 @@ let usersOnline = 0;
 wss.on('connection', (ws) => {
   console.log('Client connected');
   usersOnline += 1;
-  console.log("USERS ONLINE:", usersOnline);
   let usersOnlineObj =
     {
     type: 'userCount',
     data: {usersOnline: usersOnline}
     };
 
-  wss.broadcast(
-    JSON.stringify(usersOnlineObj)
-  );
+  wss.broadcast(JSON.stringify(usersOnlineObj));
 
   ws.on('message', function incoming(message) {
     let newEvent = JSON.parse(message);
-    console.log("TYPE OF THING: ", newEvent.type);
+
     if (newEvent.type === "postMessage"){
       let newMessage = newEvent;
       console.log('> ' + newMessage.username + " said " + newMessage.content);
@@ -51,12 +48,12 @@ wss.on('connection', (ws) => {
       let uniqueId = uuid.v1();
       let outgoingMessage = {type: "incomingMessage", id: uniqueId, username: newMessage.username, content: newMessage.content};
       wss.broadcast(JSON.stringify(outgoingMessage));
+
     } else if (newEvent.type === "postNotification"){
-        console.log("got a new notification");
         let newNotification = newEvent;
+        console.log(`${newNotification.oldUsername} changed their name to ${newNotification.newUsername}`);
+
         let uniqueId = uuid.v1();
-        console.log(newNotification);
-        console.log(`${newNotification.oldUsername} changed their name to ${newNotification.newUsername}`)
         let outgoingNotification = {
           type:"incomingNotification",
           oldUsername:newNotification.oldUsername,
@@ -64,9 +61,11 @@ wss.on('connection', (ws) => {
           id: uniqueId,
           content: newNotification.content
         };
+
         wss.broadcast(JSON.stringify(outgoingNotification));
+
     } else {
-        console.log("something went Horribly Awry");
+        console.log("Error: unknown type");
     }
   });
 
@@ -80,9 +79,7 @@ wss.on('connection', (ws) => {
     data: {usersOnline: usersOnline}
     };
 
-    wss.broadcast(
-      JSON.stringify(usersOnlineObj)
-    );
+    wss.broadcast(JSON.stringify(usersOnlineObj));
   });
 });
 
