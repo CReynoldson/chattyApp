@@ -25,6 +25,18 @@ nav {
 nav h1 {
   margin: 0;
   font-family: 'Lobster', cursive;
+  float: left;
+}
+
+.navbar {
+  clear:both;
+}
+
+.userCount {
+  font-family: 'Lobster', cursive;
+  margin: 0;
+  float: right;
+  line-height: 3;
 }
 
 #message-list {

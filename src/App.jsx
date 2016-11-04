@@ -5,7 +5,7 @@ import Nav from './Nav.jsx';
 
 class App extends Component {
   constructor(props){
-    super(props)
+    super(props);
     this.socket = new WebSocket("ws://localhost:3001/");
     this.addMessage = this.addMessage.bind(this);
     this.receiveMessage = this.receiveMessage.bind(this);
@@ -15,7 +15,7 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
-      notification: ""
+      userCount: 0
     };
   }
 
@@ -49,8 +49,8 @@ class App extends Component {
           this.receiveNotification(oldUsername, newUsername);
           break;
         case "userCount":
-          console.log(event.data);
-          this.updateUserCount(event.data);
+          console.log(info.data);
+          this.updateUserCount(info.data);
           break;
       }
     }
@@ -87,14 +87,14 @@ class App extends Component {
 
   //receive notification from server
   receiveNotification (oldUsername, newUsername) {
-    let update = `${oldUsername} changed their name to ${newUsername}`
+    let update = `${oldUsername} changed their name to ${newUsername}`;
     let newNoti = this.state.messages.concat({notification: update});
     this.setState({currentUser: {name: newUsername}});
     this.setState({messages: newNoti});
   }
 
   updateUserCount (userCount) {
-    console.log(userCount);
+    this.setState({userCount: userCount.usersOnline});
   }
 
   render() {
@@ -102,13 +102,10 @@ class App extends Component {
     return (
       <div>
         <div className="wrapper">
-          <nav>
-            <h1>Chatty</h1>
-          </nav>
+          <Nav userCount={this.state.userCount}/>
         </div>
         <MessageList messages={this.state.messages}
         />
-
         <Chatbar currentUser={this.state.currentUser}
                  addMessage={this.addMessage}
                  messages={this.state.messages}
