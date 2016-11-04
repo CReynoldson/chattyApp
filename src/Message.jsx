@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 
  export default class Message extends React.Component{
+
   render(){
-    console.log("Rendering <Message/>");
     return (
-      <footer>
-        <input id="username" type="text" placeholder="Your Name (Optional)" />
-        <input id="new-message" type="text" placeholder="Type a message and hit ENTER" />
-      </footer>
+      <div>
+        <div className="message">
+          <div className="message system">{this.props.message.notification}</div>
+          <span className="username">{this.props.message.username}</span>
+          <span className="content">{this.props.message.content}</span>
+        </div>
+      </div>
     )
   }
  }

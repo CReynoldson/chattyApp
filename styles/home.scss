@@ -1,3 +1,5 @@
+$theme: #74E7ED;
+
 h1 {
   color: black;
 }
@@ -17,11 +19,24 @@ nav {
   height: 40px;
   padding: 8px;
   border-bottom: 1px solid black;
-  background-color: tomato;
+  background-color: $theme;
 }
 
 nav h1 {
   margin: 0;
+  font-family: 'Lobster', cursive;
+  float: left;
+}
+
+.navbar {
+  clear:both;
+}
+
+.userCount {
+  font-family: 'Lobster', cursive;
+  margin: 0;
+  float: right;
+  line-height: 3;
 }
 
 #message-list {
@@ -55,7 +70,7 @@ nav h1 {
 footer {
   height: 41px;
   border-top: 1px solid black;
-  background-color: tomato;
+  background-color: $theme;
   display: flex; align-items: center;
 }
 
