@@ -53,12 +53,10 @@ wss.on('connection', (ws) => {
         let newNotification = newEvent;
         console.log(`${newNotification.oldUsername} changed their name to ${newNotification.newUsername}`);
 
-        let uniqueId = uuid.v1();
         let outgoingNotification = {
           type:"incomingNotification",
           oldUsername:newNotification.oldUsername,
           newUsername: newNotification.newUsername,
-          id: uniqueId,
           content: newNotification.content
         };
 

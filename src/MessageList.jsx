@@ -12,9 +12,9 @@ import Message from './Message.jsx';
     console.log("Rendering <MessageList/>");
     return (
       <div id="message-list">
-        {this.props.messages.map((messageInfo) => {
+        {this.props.messages.map((messageInfo, index) => {
             return (
-            <Message key={messageInfo.id} message={messageInfo}/>
+            <Message key={index} message={messageInfo}/>
             )
           })
         }
