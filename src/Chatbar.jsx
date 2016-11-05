@@ -38,6 +38,7 @@
       //Handle new messages
       if (id === "new-message"){
         this.props.addMessage(this.state);
+        event.target.value = "";
       }
     }
   }
@@ -58,7 +59,7 @@
           id="new-message"
           type="text"
           placeholder="Type a message and hit ENTER"
-          defaultValue={this.state.value}
+          DefaultValue={this.state.value}
           onChange={this.handleChange}
           onKeyDown={this.handleSubmit}
           autoFocus="true"
